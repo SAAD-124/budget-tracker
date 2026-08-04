@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../App'
+import { loadFinancialSnapshot, answerLocally } from '../lib/insights'
 
 const SUGGESTIONS = [
   'How is my spending this month?',
@@ -26,12 +27,22 @@ export default function AIChat() {
   ])
   const [input, setInput] = useState('')
   const [thinking, setThinking] = useState(false)
+  const [offline, setOffline] = useState(false)
+  const snapshotRef = useRef(null)
   const bottomRef = useRef(null)
   const textareaRef = useRef(null)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, thinking])
+
+  // Cached so the offline path doesn't refetch on every question.
+  async function getSnapshot() {
+    if (!snapshotRef.current) {
+      snapshotRef.current = await loadFinancialSnapshot(profile)
+    }
+    return snapshotRef.current
+  }
 
   async function send(text) {
     const userMsg = text || input.trim()
@@ -64,12 +75,21 @@ export default function AIChat() {
       }
 
       const data = await res.json()
+      setOffline(false)
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply }])
-    } catch (err) {
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: `Sorry, I couldn't connect right now. ${err.message || 'Please try again.'}`
-      }])
+    } catch {
+      // AI unavailable (no key, quota, network). Answer from real data instead
+      // of showing an error -- the tab stays useful either way.
+      try {
+        const snapshot = await getSnapshot()
+        setOffline(true)
+        setMessages(prev => [...prev, { role: 'assistant', content: answerLocally(userMsg, snapshot) }])
+      } catch {
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: `I couldn't reach the AI service or read your data just now. Try again in a moment.`
+        }])
+      }
     }
     setThinking(false)
   }
@@ -84,12 +104,14 @@ export default function AIChat() {
   return (
     <div className="chat-screen" style={{ maxWidth: 430, margin: '0 auto' }}>
       <div className="chat-header">
-        <div className="chat-ai-tag">
+        <div className={`chat-ai-tag ${offline ? 'offline' : ''}`}>
           <div className="chat-ai-dot" />
-          AI Powered
+          {offline ? 'Offline Analysis' : 'AI Powered'}
         </div>
         <div className="chat-title">Financial AI</div>
-        <div className="chat-subtitle">Powered by Claude · Speaks KWD</div>
+        <div className="chat-subtitle">
+          {offline ? 'Reading your data directly · Speaks KWD' : 'Powered by Claude · Speaks KWD'}
+        </div>
       </div>
 
       {messages.length === 1 && (

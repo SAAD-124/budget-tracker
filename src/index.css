@@ -935,6 +935,10 @@ a { text-decoration: none; color: inherit; }
   background: var(--secondary);
   animation: pulse 2s infinite;
 }
+.chat-ai-tag.offline .chat-ai-dot {
+  background: var(--accent);
+  animation: none;
+}
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 .chat-title { font-size: 22px; font-weight: 800; }
 .chat-subtitle { font-size: 13px; opacity: .75; margin-top: 4px; }
