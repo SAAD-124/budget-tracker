@@ -27,26 +27,30 @@
   --sh-lg: 0 12px 24px rgba(0,0,0,.1);
 }
 
-[data-theme="dark"], @media (prefers-color-scheme: dark) { :root {
-  --bg: #0F172A;
-  --surface: #1E293B;
-  --surface2: #0F1629;
-  --border: #334155;
-  --text: #F1F5F9;
-  --text2: #CBD5E1;
-  --muted: #94A3B8;
-  --primary: #818CF8;
-  --primary-l: #1E1B4B;
-  --secondary: #34D399;
-  --secondary-l: #064E3B;
-  --accent: #FCD34D;
-  --accent-l: #451A03;
-  --danger: #F87171;
-  --danger-l: #450A0A;
-  --sh: 0 1px 3px rgba(0,0,0,.3);
-  --sh-md: 0 4px 12px rgba(0,0,0,.3);
-  --sh-lg: 0 12px 24px rgba(0,0,0,.35);
-}}
+/* Follows the OS preference until the user picks a theme explicitly.
+   Scoped so an explicit light choice always wins over the media query. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F172A;
+    --surface: #1E293B;
+    --surface2: #0F1629;
+    --border: #334155;
+    --text: #F1F5F9;
+    --text2: #CBD5E1;
+    --muted: #94A3B8;
+    --primary: #818CF8;
+    --primary-l: #1E1B4B;
+    --secondary: #34D399;
+    --secondary-l: #064E3B;
+    --accent: #FCD34D;
+    --accent-l: #451A03;
+    --danger: #F87171;
+    --danger-l: #450A0A;
+    --sh: 0 1px 3px rgba(0,0,0,.3);
+    --sh-md: 0 4px 12px rgba(0,0,0,.3);
+    --sh-lg: 0 12px 24px rgba(0,0,0,.35);
+  }
+}
 
 [data-theme="dark"] {
   --bg: #0F172A; --surface: #1E293B; --surface2: #0F1629;

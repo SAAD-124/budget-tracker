@@ -127,7 +127,7 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={{ session, profile, setProfile, loading, theme, applyTheme }}>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <AppRoutes />
       </BrowserRouter>
     </AuthContext.Provider>
