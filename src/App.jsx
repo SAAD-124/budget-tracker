@@ -10,6 +10,7 @@ import Budget from './pages/Budget'
 import Savings from './pages/Savings'
 import AIChat from './pages/AIChat'
 import Profile from './pages/Profile'
+import NotFound from './pages/NotFound'
 import BottomNav from './components/BottomNav'
 
 export const AuthContext = createContext(null)
@@ -82,7 +83,7 @@ function AppRoutes() {
         <Route path="/profile" element={
           <ProtectedRoute><Profile /><BottomNav /></ProtectedRoute>
         } />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   )

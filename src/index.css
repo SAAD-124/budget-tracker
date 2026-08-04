@@ -810,6 +810,68 @@ a { text-decoration: none; color: inherit; }
 }
 .tx-receipt-badge { font-size: 11px; margin-left: 5px; opacity: .65; }
 
+/* ─── NOT FOUND ──────────────────────────────────────────── */
+.notfound {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 32px 24px;
+  max-width: 430px; margin: 0 auto;
+}
+.notfound-code {
+  font-size: 72px; font-weight: 800; line-height: 1;
+  color: var(--primary);
+  opacity: .18;
+  letter-spacing: -2px;
+}
+.notfound-title {
+  font-size: 22px; font-weight: 800; color: var(--text);
+  margin-top: -12px;
+}
+.notfound-desc {
+  font-size: 14px; color: var(--muted);
+  margin-top: 10px; line-height: 1.6;
+  max-width: 320px;
+}
+.notfound-path {
+  display: inline-block;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1px 6px;
+  font-size: 12.5px;
+  color: var(--text2);
+  word-break: break-all;
+}
+.notfound-actions {
+  display: flex; flex-direction: column; gap: 10px;
+  width: 100%; max-width: 280px;
+  margin-top: 28px;
+}
+.notfound-links {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  justify-content: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  width: 100%; max-width: 320px;
+}
+.notfound-link {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 100px;
+  padding: 7px 13px;
+  font-size: 12.5px; font-weight: 600;
+  color: var(--text2);
+  cursor: pointer; transition: all .15s;
+}
+.notfound-link:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-l);
+}
+
 /* ─── BUDGET ─────────────────────────────────────────────── */
 .budget-overview-card {
   margin: 0 20px;
