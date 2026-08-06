@@ -88,6 +88,9 @@ a { text-decoration: none; color: inherit; }
 /* ─── APP SHELL ──────────────────────────────────────────── */
 #root { min-height: 100dvh; display: flex; flex-direction: column; }
 .app-shell {
+  /* width:100% matters: as a flex item with auto side margins the shell
+     would otherwise size to max-width and overflow narrower phones. */
+  width: 100%;
   max-width: 430px;
   margin: 0 auto;
   min-height: 100dvh;
@@ -112,6 +115,63 @@ a { text-decoration: none; color: inherit; }
   animation: spin .7s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── INTERACTION POLISH ─────────────────────────────────── */
+/* Removes the 300ms tap delay and the grey flash on iOS Safari. */
+button, .tx-card, .filter-chip, .cat-item, .pay-item, .nav-item, .upsell-card {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* One consistent press response instead of per-component guesswork. */
+button:active:not(:disabled),
+.tx-card:active,
+.upsell-card:active { transform: scale(.975); }
+button, .tx-card, .upsell-card { transition: transform .12s ease, background .15s ease, border-color .15s ease; }
+button:disabled { cursor: not-allowed; opacity: .55; }
+
+/* Visible only for keyboard users, so pointer users see no focus ring. */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--r-xs);
+}
+
+/* Content settling in shouldn't jump. */
+.page, .dashboard { animation: fade-up .28s ease both; }
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Skeletons read as "loading" without a spinner hijacking the whole screen. */
+.skeleton {
+  background: linear-gradient(90deg, var(--surface2) 25%, var(--border) 50%, var(--surface2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.3s ease-in-out infinite;
+  border-radius: var(--r-xs);
+}
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+.skeleton-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.skeleton-circle { width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0; }
+.skeleton-line   { height: 11px; }
+.skeleton-stack  { flex: 1; display: flex; flex-direction: column; gap: 7px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  button:active:not(:disabled), .tx-card:active, .upsell-card:active { transform: none; }
+}
 
 /* ─── PAGE WRAPPER ───────────────────────────────────────── */
 .page {
@@ -455,7 +515,17 @@ a { text-decoration: none; color: inherit; }
   position: relative;
 }
 .nav-item.active { color: var(--primary); }
-.nav-item svg { width: 22px; height: 22px; }
+/* A small bar above the active tab -- colour alone is easy to miss,
+   and fails entirely for colour-blind users. */
+.nav-item.active::before {
+  content: '';
+  position: absolute; top: 0;
+  width: 20px; height: 3px;
+  border-radius: 0 0 3px 3px;
+  background: var(--primary);
+}
+.nav-item svg { width: 22px; height: 22px; transition: transform .15s ease; }
+.nav-item.active svg { transform: translateY(-1px); }
 .nav-add {
   width: 48px; height: 48px;
   background: var(--primary);

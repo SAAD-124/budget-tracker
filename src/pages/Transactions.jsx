@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { ListSkeleton } from '../components/Skeleton'
 
 const KWD = n => parseFloat(n || 0).toFixed(3)
 
@@ -95,7 +96,7 @@ export default function Transactions() {
       </div>
 
       {loading ? (
-        <div className="loading-screen" style={{ minHeight: 200 }}><div className="spinner" /></div>
+        <ListSkeleton rows={7} />
       ) : txs.length === 0 ? (
         <div className="empty-state">
           <div className="empty-icon">🔍</div>
