@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../App'
 
 export default function Profile() {
   const { profile, theme, applyTheme, session } = useAuth()
+  const navigate = useNavigate()
   const [signingOut, setSigningOut] = useState(false)
 
   async function signOut() {
@@ -38,6 +40,17 @@ export default function Profile() {
             <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', textTransform: 'capitalize' }}>{s.value}</div>
           </div>
         ))}
+      </div>
+
+      <div style={{ padding: '20px 20px 0' }}>
+        <button className="upsell-card" onClick={() => navigate('/premium')}>
+          <div className="upsell-icon">📈</div>
+          <div style={{ flex: 1, textAlign: 'left' }}>
+            <div className="upsell-title">Premium Charts</div>
+            <div className="upsell-desc">Weekday patterns, category trends, top merchants</div>
+          </div>
+          <div className="upsell-arrow">›</div>
+        </button>
       </div>
 
       <div className="setting-section">

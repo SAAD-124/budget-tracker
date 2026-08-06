@@ -10,6 +10,7 @@ import Budget from './pages/Budget'
 import Savings from './pages/Savings'
 import AIChat from './pages/AIChat'
 import Profile from './pages/Profile'
+import Premium from './pages/Premium'
 import NotFound from './pages/NotFound'
 import BottomNav from './components/BottomNav'
 
@@ -82,6 +83,9 @@ function AppRoutes() {
         } />
         <Route path="/profile" element={
           <ProtectedRoute><Profile /><BottomNav /></ProtectedRoute>
+        } />
+        <Route path="/premium" element={
+          <ProtectedRoute><Premium /><BottomNav /></ProtectedRoute>
         } />
         <Route path="*" element={<NotFound />} />
       </Routes>
